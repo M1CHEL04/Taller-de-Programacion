@@ -1,0 +1,117 @@
+programa ejercicio2
+procesos
+  proceso juntarF(ES f: numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      f:= f+1
+  fin
+  proceso juntarP(ES p: numero)
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      p:= p+1
+  fin
+  proceso limpiar (ES p: numero; ES f: numero)
+  comenzar
+    juntarP(p)  
+    juntarF(f)
+  fin
+  proceso vaciar (E p: numero; E f: numero)
+  comenzar
+    repetir p
+      depositarPapel
+    repetir f
+      depositarFlor
+  fin
+areas
+  a1: AreaP (1,1,100,1)
+  a2: AreaP (1,2,100,2)
+  a3: AreaP (1,3,100,3)
+  rJ: AreaP (1,4,1,4)
+  punto: AreaC (50,50,50,50)
+robots
+  robot recolector
+  variables
+    id: numero
+    esq: numero
+    f: numero
+    p: numero
+    ActAv: numero
+    ActCa: numero
+    aux: numero
+  comenzar
+    ActAv:= PosAv
+    ActCa:= PosCa
+    derecha
+    RecibirMensaje(id,rJefe)
+    mientras(PosAv<100)
+      esq:= 0
+      p:= 0
+      f:= 0
+      mientras((esq<>10)&(PosAv<100))
+        limpiar(p,f)
+        mover
+        esq:= esq+1
+      BloquearEsquina(50,50)
+      Pos(50,50)
+      vaciar (p,f)
+      Pos((ActAv+esq),ActCa)
+      LiberarEsquina(50,50)
+      ActAv:= ActAv+esq
+      si(id=1)
+        EnviarMensaje(1,r2)
+        EnviarMensaje(1,r3)
+        RecibirMensaje(aux,r2)
+        RecibirMensaje(aux,r3)  
+      sino
+        si(id=2)
+          EnviarMensaje(1,r1)
+          EnviarMensaje(1,r3)
+          RecibirMensaje(aux,r1)
+          RecibirMensaje(aux,r3)
+        sino
+          EnviarMensaje(1,r1)
+          EnviarMensaje(1,r2)
+          RecibirMensaje(aux,r1)
+          RecibirMensaje(aux,r2)
+      {RecibirMensaje(aux,*)x2. Es lo mismo?}
+    EnviarMensaje(1,rJefe)
+  fin
+  robot jefe
+  variables
+    cant: numero
+    aux: numero
+    f: numero
+  comenzar
+    f:= 0
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    mientras(cant<>3)
+      RecibirMensaje(aux,*)
+      cant:= cant+1
+    Pos(50,50)
+    juntarF(f)
+    Pos(1,4)
+    Informar(f)
+  fin
+variables
+  r1: recolector
+  r2: recolector
+  r3: recolector
+  rJefe: jefe
+comenzar
+  AsignarArea(r1,a1)
+  AsignarArea(r1,punto)
+  AsignarArea(r2,a2)
+  AsignarArea(r2,punto)
+  AsignarArea(r3,a3)
+  AsignarArea(r3,punto)
+  AsignarArea(rJefe,rJ)
+  AsignarArea(rJefe,punto)
+  Iniciar(rJefe,1,4)
+  Iniciar(r1,1,1)
+  Iniciar(r2,1,2)
+  Iniciar(r3,1,3)
+fin

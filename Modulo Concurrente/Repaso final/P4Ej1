@@ -1,0 +1,115 @@
+programa ej1
+procesos
+  proceso avanzar (E f:numero)
+  comenzar
+    repetir f
+      depositarFlor
+      mover
+  fin
+  proceso juntarF (E f: numero)
+  comenzar
+    repetir f
+      tomarFlor 
+  fin
+  proceso dejarF (E f:numero)
+  comenzar
+    repetir f
+      depositarFlor
+  fin
+areas
+  a1: AreaPC (1,1,1,100)
+  a2: AreaPC (2,1,2,100)
+  a3: AreaPC (3,1,3,100)
+  aS: AreaP (4,1,4,1)
+robots
+  robot cliente
+  variables
+    id:numero
+    cantF:numero
+    acc:boolean
+    actAv:numero
+    actCa:numero
+  comenzar
+    actAv:=PosAv
+    RecibirMensaje(id,rServer)
+    mientras(PosCa<100)
+      Random(cantF,1,4)
+      EnviarMensaje(id,rServer)
+      EnviarMensaje(cantF,rServer)
+      actCa:=PosCa
+      EnviarMensaje(actAv,rServer)
+      EnviarMensaje((actCa+1),rServer)
+      RecibirMensaje(acc,rServer)
+      mover
+      juntarF(cantF)
+      Pos(PosAv,(PosCa-1))
+      avanzar(cantF)
+    EnviarMensaje(0,rServer)
+  fin
+  robot server
+  variables
+    who: numero
+    f:numero
+    av: numero
+    ca: numero
+    cant: numero
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    cant:=0
+    mientras (cant <> 3)
+      RecibirMensaje(who,*)
+        si(who=1)
+          RecibirMensaje(f,r1)
+          si(f<>0)
+            RecibirMensaje(av,r1)
+            RecibirMensaje(ca,r1)
+            Pos(av,ca)
+            dejarF(f)
+            Pos(4,1)
+            EnviarMensaje(V,r1)
+          sino
+            cant:= cant+1
+        sino
+          si(who=2)
+            RecibirMensaje(f,r2)
+            si(f<>0)
+              RecibirMensaje(av,r2)
+              RecibirMensaje(ca,r2)
+              Pos(av,ca)
+              dejarF(f)
+              Pos(4,1)
+              EnviarMensaje(V,r2)
+            sino
+              cant:= cant+1
+          sino
+            RecibirMensaje(f,r3)
+            si(f<>0)
+              RecibirMensaje(av,r3)
+              RecibirMensaje(ca,r3)
+              Pos(av,ca)
+              dejarF(f)
+              Pos(4,1)
+              EnviarMensaje(V,r3)
+            sino
+              cant:= cant+1
+  fin
+variables
+  r1: cliente
+  r2: cliente
+  r3: cliente
+  rServer: server
+comenzar
+  AsignarArea(r1,a1)
+  AsignarArea(r2,a2)
+  AsignarArea(r3,a3)
+  AsignarArea(rServer,aS)
+  AsignarArea(rServer,a1)
+  AsignarArea(rServer,a2)
+  AsignarArea(rServer,a3)
+  Iniciar(r1,1,1)
+  Iniciar(r2,2,1)
+  Iniciar(r3,3,1)
+  Iniciar(rServer,4,1)
+fin

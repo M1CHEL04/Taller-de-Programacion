@@ -1,0 +1,87 @@
+programa ejercicio4
+procesos
+  proceso juntarF (ES aux: boolean)
+  comenzar
+    si (HayFlorEnLaEsquina)
+      tomarFlor
+    sino
+      aux:= F
+  fin
+areas
+  a0: AreaP (1,1,1,1)
+  a1: AreaP (9,9,9,9)
+  a2: AreaP (9,10,9,10)
+  a3: AreaP (9,11,9,11)
+  a4: AreaP (9,12,9,12)
+  a5: AreaP (10,10,10,10)
+  a6: AreaP (11,11,11,11)
+robots
+  robot recolector
+  variables
+    ActAv: numero
+    ActCa: numero
+    id: numero
+    aux: boolean
+  comenzar
+    aux:= V
+    RecibirMensaje(id,rJefe)
+    ActAv:= PosAv
+    ActCa:= PosCa
+    mientras(aux)
+      BloquearEsquina(10,10)
+      Pos(10,10)
+      juntarF(aux)
+      si (aux)
+        BloquearEsquina(11,11)
+        Pos(11,11)
+        LiberarEsquina(10,10)
+        depositarFlor
+        Pos(ActAv,ActCa)
+        LiberarEsquina(11,11)
+      sino
+        Pos (ActAv,ActCa)
+        LiberarEsquina (10,10)
+    EnviarMensaje(id,rJefe)
+  fin
+  robot jefe
+  variables
+    id: numero
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    EnviarMensaje(4,r4)
+    repetir 4
+      RecibirMensaje(id,*)
+    Informar(id)
+    Pos(11,11)
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor 
+  fin
+variables
+  rJefe: jefe
+  r1: recolector
+  r2: recolector
+  r3: recolector
+  r4: recolector
+comenzar
+  AsignarArea (rJefe,a0)
+  AsignarArea (r1,a1)
+  AsignarArea (r2,a2)
+  AsignarArea (r3,a3)
+  AsignarArea(r4,a4)
+  AsignarArea (r1,a5)
+  AsignarArea (r2,a5)
+  AsignarArea (r3,a5)
+  AsignarArea (r4,a5)
+  AsignarArea (r1,a6)
+  AsignarArea (r2,a6)
+  AsignarArea (r3,a6)
+  AsignarArea (r4,a6)
+  AsignarArea (rJefe,a6)
+  Iniciar (rJefe,1,1)
+  Iniciar (r1,9,9)
+  Iniciar (r2,9,10)
+  Iniciar (r3,9,11)
+  Iniciar (r4,9,12)
+fin

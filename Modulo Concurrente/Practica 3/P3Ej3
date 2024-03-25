@@ -1,0 +1,139 @@
+programa Ej3P3
+procesos
+  proceso juntarF (ES check: boolean; ES cant: numero)
+  comenzar
+    si (HayFlorEnLaEsquina)
+      tomarFlor
+      cant:= cant+1
+    sino
+      check:= V
+  fin
+areas
+  rect: AreaPC (2,2,10,10)
+  a0: AreaP (1,1,1,1)
+  a1: AreaP (2,1,2,1)
+  a2: AreaP (3,1,3,1)
+  a3: AreaP (4,1,4,1)
+  a4: AreaP (5,1,5,1)
+robots
+  robot jefe 
+  variables
+    av: numero
+    ca: numero
+    max: numero
+    rMax: numero
+    id: numero
+    cant: numero
+  comenzar
+    max:=-1
+    Random(av,2,10)
+    Random(ca,2,10)
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    EnviarMensaje(4,r4)
+    EnviarMensaje(av,r1)
+    EnviarMensaje(ca,r1)
+    EnviarMensaje(av,r2)
+    EnviarMensaje(ca,r2)
+    EnviarMensaje(av,r3)
+    EnviarMensaje(ca,r3)
+    EnviarMensaje(av,r4)
+    EnviarMensaje(ca,r4)
+    repetir 4
+      RecibirMensaje(id,*)
+      si(id=1)
+        RecibirMensaje(cant,r1)
+        si(cant>max)
+          max:= cant
+          rMax:= id
+      sino
+        si(id=2)
+          RecibirMensaje(cant,r2)
+          si(cant>max)
+            max:= cant
+            rMax:= id
+        sino
+          si(id=3)
+            RecibirMensaje(cant,r3)
+            si(cant>max)
+              max:= cant
+              rMax:= id
+          sino
+            RecibirMensaje(cant,r4)
+            si(cant>max)
+              max:= cant
+              rMax:= id  
+    Informar(rMax)
+    Informar(max)
+  fin
+  robot recolector
+  variables
+    cant: numero
+    id: numero
+    av: numero
+    ca: numero
+    ActAv: numero
+    ActCa: numero
+    aux: boolean
+  comenzar
+    ActAv:= PosAv
+    ActCa:= PosCa
+    cant:= 0
+    aux:= F
+    RecibirMensaje(id,rJefe)
+    RecibirMensaje(av, rJefe)
+    RecibirMensaje (ca, rJefe)
+    mientras(~aux)
+      BloquearEsquina(av,ca)
+      Pos(av,ca)
+      juntarF(aux, cant)
+      Pos(ActAv,ActCa)
+      LiberarEsquina(av,ca)
+    EnviarMensaje(id,rJefe)
+    EnviarMensaje(cant,rJefe)
+  fin
+variables
+  rJefe: jefe
+  r1: recolector
+  r2: recolector
+  r3: recolector
+  r4: recolector
+comenzar
+  AsignarArea(rJefe,a0)
+  AsignarArea(r1,a1)
+  AsignarArea(r2,a2)
+  AsignarArea(r3,a3)
+  AsignarArea(r4,a4)
+  AsignarArea(r1,rect)
+  AsignarArea(r2,rect)
+  AsignarArea(r3,rect)
+  AsignarArea(r4,rect)
+  Iniciar(rJefe,1,1)
+  Iniciar(r1,2,1)
+  Iniciar(r2,3,1)
+  Iniciar(r3,4,1)
+  Iniciar(r4,5,1)
+fin
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

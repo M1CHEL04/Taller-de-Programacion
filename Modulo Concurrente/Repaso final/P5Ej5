@@ -1,0 +1,89 @@
+programa ej5
+procesos
+  proceso juntarP (E p: numero)
+  comenzar
+    repetir p
+      tomarPapel
+  fin
+  proceso dejarP (E p: numero)
+  comenzar
+    repetir p
+      depositarPapel
+  fin
+areas
+  punto: AreaC (13,5,13,5)
+  a1: AreaP (10,1,10,1)
+  a2: AreaP (11,1,11,1)
+  a3: AreaP (12,1,12,1)
+  aS: AreaP (13,1,13,1)
+robots
+  robot server
+  variables
+    id: numero
+    p: numero
+    cant: numero
+    pedido: numero
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    cant:=0
+    RecibirMensaje(id,*)
+    mientras(cant<>3)
+      Random(p,1,5)
+      BloquearEsquina(13,5)
+      Pos(13,5)
+      dejarP(p)
+      Pos(13,1)
+      LiberarEsquina(13,5)
+      si(id=1)
+        EnviarMensaje(p,r1)
+      sino
+        si(id=2)
+          EnviarMensaje(p,r2)
+        sino
+          EnviarMensaje(p,r3)
+      RecibirMensaje(id,*)
+      si(id=0)
+        cant:=cant+1
+  fin
+  robot cliente
+  variables
+    p:numero
+    actAv:numero
+    actCa:numero
+    acc:numero
+    id:numero
+  comenzar
+    actAv:=PosAv
+    actCa:=PosCa
+    RecibirMensaje(id,rServer)
+    repetir 4
+      EnviarMensaje(id,rServer)
+      RecibirMensaje(p,rServer)
+      BloquearEsquina(13,5)
+      Pos(13,5)
+      juntarP(p)
+      Pos(actAv,actCa)
+      LiberarEsquina(13,5)
+    EnviarMensaje(0,rServer)
+  fin
+variables
+  rServer: server
+  r1: cliente
+  r2: cliente
+  r3: cliente
+comenzar
+  AsignarArea(r1,a1)
+  AsignarArea(r1,punto)
+  AsignarArea(r2,a2)
+  AsignarArea(r2,punto)
+  AsignarArea(r3,a3)
+  AsignarArea(r3,punto)
+  AsignarArea(rServer,aS)
+  AsignarArea(rServer,punto)
+  Iniciar(r1,10,1)
+  Iniciar(r2,11,1)
+  Iniciar(r3,12,1)
+  Iniciar(rServer,13,1)
+fin

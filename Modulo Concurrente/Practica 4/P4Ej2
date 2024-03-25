@@ -1,0 +1,98 @@
+programa ejercicio2
+procesos
+  proceso juntarP (ES p: numero; ES aux: boolean)
+  comenzar
+    si(HayPapelEnLaEsquina)
+      mientras((HayPapelEnLaEsquina)&(p<5))
+        tomarPapel
+        p:= p+1
+    sino
+      aux:= F
+  fin
+  proceso contar (ES p: numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      p:=p+1
+    repetir p
+      depositarPapel
+  fin
+areas
+  ac1: AreaP(11,1,11,1)
+  ac2: AreaP(12,1,12,1)
+  ap1: AreaP(5,1,5,100)
+  ap2: AreaP (10,1,10,100)
+  punto: AreaC(13,2,13,2)
+robots
+  robot productor
+  variables
+    p: numero
+    pasos: numero
+    ActAv: numero
+    ActCa: numero
+    aux: boolean
+  comenzar
+    aux:= V
+    ActAv:= PosAv
+    ActCa:= PosCa
+    mientras((PosCa<100)&(aux))
+      p:= 0
+      pasos:=0
+      juntarP(p,aux)
+      mientras((p<>5)&(PosCa<100))
+        mover
+        pasos:= pasos+1
+        juntarP(p,aux)
+      BloquearEsquina(13,2)
+      Pos(13,2)
+      repetir p
+        depositarPapel
+      Pos(ActAv,(ActCa+pasos))
+      LiberarEsquina(13,2)
+    Informar('termine',aux)
+  fin
+  robot consumidor
+  variables
+    ActAv: numero
+    ActCa: numero
+    p: numero
+    cant: numero
+    int: numero
+  comenzar
+    ActAv:= PosAv
+    ActCa:= PosCa
+    int:= 0
+    mientras(int<>8)
+      p:=0
+      Random(cant,2,5)
+      BloquearEsquina(13,2)
+      Pos(13,2)
+      contar(p)
+      si(p >= cant)
+        int:=0
+        repetir cant
+          tomarPapel
+      sino
+        int:= int+1
+      Pos(ActAv,ActCa)
+      LiberarEsquina(13,2)
+  fin
+variables
+  p1: productor
+  p2: productor
+  c1: consumidor
+  c2: consumidor
+comenzar
+  AsignarArea(p1,ap1)
+  AsignarArea(p1,punto)
+  AsignarArea(p2,ap2)
+  AsignarArea(p2,punto)
+  AsignarArea(c1,ac1)
+  AsignarArea(c1,punto)
+  AsignarArea(c2,ac2)
+  AsignarArea(c2,punto)
+  Iniciar(p1,5,1)
+  Iniciar(p2,10,1)
+  Iniciar(c1,11,1)
+  Iniciar(c2,12,1)
+fin

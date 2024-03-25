@@ -1,0 +1,98 @@
+programa ej2
+procesos
+  proceso juntarF(ES f: numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      f:=f+1
+  fin
+  proceso vaciar (E f: numero)
+  comenzar
+    repetir f
+      depositarFlor
+  fin
+areas
+  a2: AreaP (1,2,100,2)
+  a3: AreaP (1,3,100,3)
+  a1: AreaP(1,1,100,1)
+  punto: AreaC (50,50,50,50)
+  aJ: AreaP (1,4,1,4)
+robots
+  robot jefe
+  variables
+    acc: numero
+    f: numero
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    f:=0
+    repetir 3
+      RecibirMensaje(acc,*)
+    Pos(50,50)
+    juntarF(f)
+    Pos(1,4)
+    Informar(f)
+  fin
+  robot recolector
+  variables
+    id:numero
+    f:numero
+    pasos:numero
+    acc:boolean
+    actAv:numero
+    actCa:numero
+  comenzar
+    f:=0
+    derecha
+    actAv:=PosAv
+    actCa:=PosCa
+    RecibirMensaje(id,rJefe)
+    mientras(PosAv<100)
+      pasos:=0
+      mientras(PosAv<100)&(pasos<10)
+        juntarF(f)
+        mover
+        pasos:=pasos+1
+      si(id=1)
+        EnviarMensaje(V,r2)
+        EnviarMensaje(V,r3)
+        RecibirMensaje(acc,r2)
+        RecibirMensaje(acc,r3)
+      sino
+        si(id=2)
+          EnviarMensaje(V,r1)
+          EnviarMensaje(V,r3)
+          RecibirMensaje(acc,r1)
+          RecibirMensaje(acc,r3)
+        sino
+          EnviarMensaje(V,r1)
+          EnviarMensaje(V,r2)
+          RecibirMensaje(acc,r1)
+          RecibirMensaje(acc,r2)
+    BloquearEsquina(50,50)
+    Pos(50,50)
+    vaciar(f)
+    Pos(actAv,actCa)
+    LiberarEsquina(50,50)
+    EnviarMensaje(1,rJefe)
+  fin
+variables
+  r1:recolector
+  r2:recolector
+  r3:recolector
+  rJefe:jefe
+comenzar
+  AsignarArea(r1,a1)
+  AsignarArea(r1,punto)
+  AsignarArea(r2,a2)
+  AsignarArea(r2,punto)
+  AsignarArea(r3,a3)
+  AsignarArea(r3,punto)
+  AsignarArea(rJefe,aJ)
+  AsignarArea(rJefe,punto)
+  Iniciar(r1,1,1)
+  Iniciar(r2,1,2)
+  Iniciar(r3,1,3)
+  Iniciar(rJefe,1,4)
+fin

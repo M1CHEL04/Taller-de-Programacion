@@ -1,0 +1,83 @@
+programa parcialViejoV2
+procesos
+  proceso juntarF (ES f: numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      f:= f+1
+  fin
+  proceso cuadrado(E tam: numero; ES f: numero)
+  comenzar
+    repetir 4
+      repetir tam
+        juntarF(f)
+        mover
+      derecha
+  fin
+  proceso depositar (E f: numero;E av: numero; E ca: numero)
+  comenzar
+    repetir f
+      BloquearEsquina(50,50)
+      Pos(50,50)
+      depositarFlor
+      Pos(av,ca)
+      LiberarEsquina(50,50)
+  fin
+areas
+  aJ: AreaP (51,1,51,1)
+  punto: AreaPC (50,50,50,50)
+  a1: AreaP (1,1,6,31)
+  a2: AreaP (8,1,13,31)
+  a3: AreaP (15,1,20,31)
+robots
+  robot jefe
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+  fin
+  robot recolector
+  variables
+    id: numero
+    tam: numero
+    f: numero
+    aux: numero
+  comenzar
+    RecibirMensaje(id,rJefe)
+    Random(tam,1,5)
+    f:= 0
+    repetir 5
+      cuadrado(tam,f)
+      Pos(PosAv,(PosCa+tam+1))
+      si(id=1)
+        EnviarMensaje(1,r2)
+        EnviarMensaje(1,r3)
+      sino
+        si(id=2)
+          EnviarMensaje(1,r1)
+          EnviarMensaje(1,r3)
+        sino
+          EnviarMensaje(1,r1)
+          EnviarMensaje(1,r2)
+      RecibirMensaje(aux,*)
+      RecibirMensaje(aux,*)
+    depositar(f,PosAv,PosCa)
+  fin
+variables
+  rJefe: jefe
+  r1: recolector
+  r2: recolector
+  r3: recolector
+comenzar
+  AsignarArea (rJefe, aJ)
+  AsignarArea(r1,a1)
+  AsignarArea(r1,punto)
+  AsignarArea(r2,a2)
+  AsignarArea(r2,punto)
+  AsignarArea(r3,a3)
+  AsignarArea(r3,punto)
+  Iniciar(rJefe,51,1)
+  Iniciar(r1,1,1)
+  Iniciar(r2,8,1)
+  Iniciar(r3,15,1)
+fin

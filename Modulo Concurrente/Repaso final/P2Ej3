@@ -1,0 +1,85 @@
+programa ej3
+procesos
+  proceso juntarF(ES f: numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      f:=f+1
+  fin
+  proceso juntarP (ES p: numero)
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      p:=p+1
+  fin
+  proceso recorrerA (ES p:numero)
+  comenzar
+    repetir 9
+      juntarP(p)
+      mover
+    juntarP(p)
+  fin
+  proceso recorrerB (ES f: numero)
+  comenzar
+    repetir 9
+      juntarF(f)
+      mover
+    juntarF(f)
+  fin
+areas
+  a1: AreaP (1,1,10,1)
+  a2: AreaP (11,1,20,1)
+  b1: AreaP (1,5,10,5)
+  b2: AreaP (11,5,20,5)
+robots
+  robot equipoA1
+  variables
+    p:numero
+  comenzar
+    p:=0
+    derecha
+    recorrerA(p)
+    EnviarMensaje(p,ra2)
+  fin
+  robot equipoA2
+  variables 
+    p:numero
+  comenzar
+    derecha
+    RecibirMensaje(p,ra1)
+    recorrerA(p)
+    Informar(p)
+  fin
+  robot equipoB1
+  variables
+    f:numero
+  comenzar
+    f:=0
+    derecha
+    recorrerB(f)
+    EnviarMensaje(f,rb2)
+  fin
+  robot equipoB2
+  variables
+    f:numero
+  comenzar
+    derecha
+    RecibirMensaje(f,rb1)
+    recorrerB(f)
+    Informar(f)
+  fin
+variables
+  ra1: equipoA1
+  ra2: equipoA2
+  rb1: equipoB1
+  rb2: equipoB2
+comenzar
+  AsignarArea(ra1,a1)
+  AsignarArea(ra2,a2)
+  AsignarArea(rb1,b1)
+  AsignarArea(rb2,b2)
+  Iniciar(ra1,1,1)
+  Iniciar (ra2,11,1)
+  Iniciar(rb1,1,5)
+  Iniciar(rb2,11,5)
+fin

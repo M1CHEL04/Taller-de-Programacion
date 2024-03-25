@@ -1,0 +1,83 @@
+programa Ej3P2
+procesos
+  proceso juntarP (ES cant: numero)
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      cant:= cant + 1
+  fin
+  proceso juntarF (ES cant: numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      cant:= cant + 1
+  fin
+areas 
+  a1: AreaP (1,1,10,1)
+  a2: AreaP (11,1,20,1)
+  a3: AreaP (1,5,10,5)
+  a4: AreaP (11,5,20,5)
+robots 
+  robot A1
+  variables
+    cant: numero
+  comenzar
+    cant:= 0
+    derecha
+    repetir 9
+      juntarP(cant)
+      mover
+    juntarP(cant)
+    EnviarMensaje (cant,rA2)
+  fin
+  robot A2  
+  variables
+    cant: numero
+  comenzar
+    RecibirMensaje (cant,rA1)
+    derecha
+    repetir 9
+      juntarP(cant)
+      mover
+    juntarP(cant)
+    Informar (cant)
+  fin
+  robot B1
+  variables
+    cant: numero
+  comenzar
+    cant:= 0
+    derecha
+    repetir 9
+      juntarF (cant)
+      mover
+    juntarF (cant)
+    EnviarMensaje (cant, rB2)
+  fin
+  robot B2
+  variables
+    cant: numero
+  comenzar
+    RecibirMensaje (cant, rB1)
+    derecha
+    repetir 9
+      juntarF (cant)
+      mover
+    juntarF (cant)
+    Informar (cant)
+  fin
+variables
+  rA1: A1
+  rA2: A2
+  rB1: B1
+  rB2: B2
+comenzar
+  AsignarArea (rA1,a1)
+  AsignarArea (rA2,a2)
+  AsignarArea (rB1,a3)
+  AsignarArea (rB2,a4)
+  Iniciar (rA1,1,1)
+  Iniciar (rA2,11,1)
+  Iniciar (rB1,1,5)
+  Iniciar (rB2,11,5)
+fin

@@ -1,0 +1,124 @@
+programa ej4
+procesos
+  proceso limpiar
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+  fin
+areas
+  cuadrado: AreaPC (25,25,75,75)
+  a1: AreaP (25,1,25,1)
+  a2: AreaP (30,1,30,1)
+  a3: AreaP (35,1,35,1)
+  a4: AreaP (40,1,40,1)
+  aF: AreaP (1,1,1,1)
+robots
+  robot fiscalizador
+  variables
+    who:numero
+    aux:numero
+    res: numero
+    rMax:numero
+    cant:numero
+    max:numero
+  comenzar
+    max:=-1
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    EnviarMensaje(4,r4)
+    repetir 10
+      Random(aux,1,4)
+      si(aux=1)
+        EnviarMensaje(V,r1)
+        RecibirMensaje(res,r1)
+      sino
+        si(aux=2)
+          EnviarMensaje(V,r2)
+          RecibirMensaje(res,r2)
+        sino
+          si(aux=3)
+            EnviarMensaje(V,r3)
+            RecibirMensaje(res,r3)
+          sino
+            EnviarMensaje(V,r4)
+            RecibirMensaje(res,r4)
+    EnviarMensaje(F,r1)
+    EnviarMensaje(F,r2)
+    EnviarMensaje(F,r3)
+    EnviarMensaje(F,r4)
+    repetir 4
+      RecibirMensaje(who,*)
+      si(who=1)
+        RecibirMensaje(cant,r1)
+      sino
+        si(who=2)
+          RecibirMensaje(cant,r2)
+        sino
+          si(who=3)
+            RecibirMensaje(cant,r3)
+          sino
+            RecibirMensaje(cant,r4)
+      si (cant>max)
+        max:=cant
+        rMax:=who
+    EnviarMensaje(rMax,r1)
+    EnviarMensaje(rMax,r2)
+    EnviarMensaje(rMax,r3)
+    EnviarMensaje(rMax,r4)
+  fin
+  robot recolector
+  variables
+    id:numero
+    acceso: boolean
+    cant: numero
+    miCa:numero
+    miAv:numero
+    av:numero
+    ca:numero
+    ganador:numero
+  comenzar
+    cant:=0
+    miCa:= PosCa
+    miAv:= PosAv
+    RecibirMensaje(id,rFiscal)
+    RecibirMensaje(acceso,rFiscal)
+    mientras(acceso)
+      Random(av,25,75)
+      Random(ca,25,75)
+      Pos(av,ca)
+      limpiar
+      Pos(miAv,miCa)
+      EnviarMensaje(1,rFiscal)
+      cant:=cant+1
+      RecibirMensaje(acceso,rFiscal)
+    EnviarMensaje(id,rFiscal)
+    EnviarMensaje(cant,rFiscal)
+    RecibirMensaje(ganador,rFiscal)
+    si(ganador=id)
+      Pos(50,50)
+  fin
+variables
+  r1:recolector
+  r2:recolector
+  r3:recolector
+  r4:recolector
+  rFiscal:fiscalizador
+comenzar
+  AsignarArea(r1,cuadrado)
+  AsignarArea(r1,a1)
+  AsignarArea(r2,cuadrado)
+  AsignarArea(r2,a2)
+  AsignarArea(r3,cuadrado)
+  AsignarArea(r3,a3)
+  AsignarArea(r4,cuadrado)
+  AsignarArea(r4,a4)
+  AsignarArea(rFiscal,aF)
+  Iniciar(rFiscal,1,1)
+  Iniciar(r1,25,1)
+  Iniciar(r2,30,1)
+  Iniciar(r3,35,1)
+  Iniciar(r4,40,1)
+fin

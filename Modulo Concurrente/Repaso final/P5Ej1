@@ -1,0 +1,134 @@
+programa ej1
+procesos
+  proceso juntarP (ES p: numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      p:= p+1
+  fin
+  proceso juntarF (ES f: numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      f:=f+1
+  fin
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+  robot fiscal
+  variables
+    aux:numero
+    pTotal:numero
+    fTotal: numero
+    equipo:numero
+    who: numero
+  comenzar
+    EnviarMensaje(1,a1)
+    EnviarMensaje(1,a2)
+    EnviarMensaje(2,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(1,a1)
+    EnviarMensaje(2,a2)
+    EnviarMensaje(3,r1)
+    EnviarMensaje(4,r2)
+    pTotal:=0
+    fTotal:=0
+    repetir 4
+      RecibirMensaje(who,*)
+      si(who=1)
+        RecibirMensaje(aux,a1)
+        pTotal:= pTotal+aux
+      sino
+        si(who=2)
+          RecibirMensaje(aux,a2)
+          pTotal:=pTotal+aux
+        sino
+          si(who=3)
+            RecibirMensaje(aux,r1)
+            fTotal:= fTotal+aux
+          sino
+            RecibirMensaje(aux,r2)
+            fTotal:=fTotal+aux
+    si(fTotal>pTotal)
+      equipo:=2
+    sino
+      equipo:= 1
+    Informar('Ganador',equipo)
+  fin
+  robot papelero
+  variables
+    equipo: numero
+    id: numero
+    p: numero
+    actAv:numero
+  comenzar
+    p:=0
+    actAv:=PosAv
+    derecha
+    RecibirMensaje(equipo,rFiscal)
+    RecibirMensaje(id,rFiscal)
+    juntarP(p)
+    BloquearEsquina((actAv+1),PosCa)
+    mover
+    actAv:=PosAv
+    juntarP(p)
+    BloquearEsquina((actAv+1),PosCa)
+    mover
+    LiberarEsquina(actAv,PosCa)
+    juntarP(p)
+    actAv:=PosAv
+    mover
+    LiberarEsquina(actAv,PosCa)
+    repetir 96
+      juntarP(p)
+      mover
+    EnviarMensaje(id,rFiscal)
+    EnviarMensaje(p,rFiscal)
+  fin
+  robot florero
+  variables
+    equipo: numero
+    id: numero
+    f: numero
+    actCa: numero
+  comenzar
+    f:=0
+    RecibirMensaje(equipo,rFiscal)
+    RecibirMensaje(id,rFiscal)
+    repetir 96
+      juntarF(f)
+      mover
+    juntarF(f)
+    actCa:=PosCa
+    BloquearEsquina(PosAv,(actCa+1))
+    mover
+    juntarF(f)
+    actCa:= PosCa
+    BloquearEsquina(PosAv,(actCa+1))
+    mover
+    LiberarEsquina(PosAv,actCa)
+    actCa:=PosCa
+    juntarF(f)
+    mover
+    LiberarEsquina(PosAv,actCa)
+    EnviarMensaje(id,rFiscal)
+    EnviarMensaje(f,rFiscal)
+  fin
+variables
+  a1: papelero
+  a2: papelero
+  r1: florero
+  r2: florero
+  rFiscal: fiscal
+comenzar
+  AsignarArea(a1,ciudad)
+  AsignarArea(a2,ciudad)
+  AsignarArea(r1,ciudad)
+  AsignarArea(r2,ciudad)
+  AsignarArea(rFiscal,ciudad)
+  Iniciar(a1,1,98)
+  Iniciar(a2,1,99)
+  Iniciar(r1,2,1)
+  Iniciar(r2,3,1)
+  Iniciar(rFiscal,1,1)
+fin

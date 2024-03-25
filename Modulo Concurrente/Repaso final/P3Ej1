@@ -1,0 +1,106 @@
+programa ej1
+procesos
+  proceso juntarF  (ES f: numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      f:= f+1
+  fin
+  proceso juntarP (ES p: numero)
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      p:=p+1
+  fin
+  proceso vaciarF (E f:numero; E av: numero; E ca: numero)
+  comenzar
+    repetir f
+      BloquearEsquina(10,10)
+      Pos(10,10)
+      depositarFlor
+      Pos(av,ca)
+      LiberarEsquina(10,10)
+  fin
+  proceso vaciarP (E p:numero; E av:numero; E ca:numero)
+  comenzar
+    repetir p
+      BloquearEsquina(10,10)
+      Pos(10,10)
+      depositarPapel
+      Pos(av,ca)
+      LiberarEsquina(10,10)
+  fin
+areas
+  aF: AreaPC (1,1,5,10)
+  aP: AreaPC (6,1,10,9)
+  af1: AreaP (6,10,6,10)
+  af2: AreaP (7,10,7,10)
+  ap1: AreaP (8,10,8,10)
+  ap2: AreaP (9,10,9,10)
+  deposito: AreaC (10,10,10,10)
+robots
+  robot florero
+  variables
+    miCa:numero
+    miAv:numero
+    av:numero
+    ca:numero
+    f:numero
+  comenzar
+    f:=0
+    miCa:=PosCa
+    miAv:=PosAv
+    repetir 5
+      Random(ca,1,10)
+      Random(av,1,5)
+      BloquearEsquina(av,ca)
+      Pos(av,ca)
+      juntarF(f)
+      Pos(miAv,miCa)
+      LiberarEsquina(av,ca)
+    vaciarF(f,miAv,miCa)
+  fin
+  robot papelero
+  variables
+    p:numero
+    av:numero
+    ca:numero
+    miAv:numero
+    miCa:numero
+  comenzar
+    p:=0
+    miAv:= PosAv
+    miCa:= PosCa
+    repetir 3
+      Random(av,6,10)
+      Random(ca,1,9)
+      BloquearEsquina(av,ca)
+      Pos(av,ca)
+      juntarP(p)
+      Pos(miAv,miCa)
+      LiberarEsquina(av,ca)
+    vaciarP(p,miAv,miCa)
+  fin
+variables
+  f1: florero
+  f2:florero
+  p1:papelero
+  p2:papelero
+comenzar
+  AsignarArea(f1,aF)
+  AsignarArea(f1,af1)
+  AsignarArea(f1,deposito)
+  AsignarArea(f2,aF)
+  AsignarArea(f2,af2)
+  AsignarArea(f2,deposito)
+  AsignarArea(p1,aP)
+  AsignarArea(p1,ap1)
+  AsignarArea(p1,deposito)
+  AsignarArea(p2,aP)
+  AsignarArea(p2,ap2)
+  AsignarArea(p2,deposito)
+  Iniciar(f1,6,10)
+  Iniciar(f2,7,10)
+  Iniciar(p1,8,10)
+  Iniciar(p2,9,10)
+fin

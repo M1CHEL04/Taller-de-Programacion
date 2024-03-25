@@ -1,0 +1,98 @@
+programa ejercici1
+procesos
+  proceso juntarF (ES f: numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      f:= f+1 
+  fin
+  proceso recorrer (ES f: numero)
+  comenzar
+    repetir 9
+      juntarF(f)
+      mover
+    juntarF(f)
+  fin
+areas
+  area0: AreaP(2,1,2,1)
+  area1: AreaP(1,1,1,10)
+  area2: AreaP(2,11,2,20)
+  area3: AreaP(3,21,3,30)
+  area4: AreaP(4,31,4,40)
+  area5: AreaP(5,41,5,50)
+  area6: AreaP(6,51,6,60)
+robots
+  robot recolector
+  variables
+    f: numero
+    dif: numero
+    quienSoy: numero
+  comenzar
+    f:= 0
+    RecibirMensaje(quienSoy,rJefe)
+    recorrer(f)
+    EnviarMensaje(quienSoy,rJefe)
+    EnviarMensaje(f,rJefe)
+  fin
+  robot jefe
+  variables
+    f: numero
+    who: numero
+    max: numero
+    rMax:numero
+  comenzar
+    max:= -1
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    EnviarMensaje(4,r4)
+    EnviarMensaje(5,r5)
+    EnviarMensaje(6,r6)
+    repetir 6
+      RecibirMensaje(who,*)
+      si(who=1)
+        RecibirMensaje(f,r1)
+      sino 
+        si(who=2)
+          RecibirMensaje(f,r2)
+        sino 
+          si(who=3)
+            RecibirMensaje(f,r3)
+          sino
+            si (who=4)
+              RecibirMensaje(f,r4)
+            sino
+              si(who=5)
+                RecibirMensaje(f,r5)
+              sino
+                RecibirMensaje(f,r6)
+      si(f>max)
+        max:=f
+        rMax:=who
+    Informar(rMax)
+    Informar(max)
+  fin
+variables
+  rJefe: jefe
+  r1: recolector
+  r2: recolector
+  r3: recolector
+  r4: recolector
+  r5: recolector
+  r6: recolector
+comenzar
+  AsignarArea(rJefe,area0)
+  AsignarArea(r1,area1)
+  AsignarArea(r2,area2)
+  AsignarArea(r3,area3)
+  AsignarArea(r4,area4)
+  AsignarArea(r5,area5)
+  AsignarArea(r6,area6)
+  Iniciar(rJefe,2,1)
+  Iniciar(r1,1,1)
+  Iniciar(r2,2,11)
+  Iniciar(r3,3,21)
+  Iniciar(r4,4,31)
+  Iniciar(r5,5,41)
+  Iniciar(r6,6,51)
+fin

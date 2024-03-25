@@ -1,0 +1,122 @@
+programa parcialViejo
+procesos
+  proceso juntarF (ES f: numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      f:= f+1
+  fin
+  proceso depositar (E f: numero; E av: numero; E ca: numero)
+  comenzar
+    repetir f
+      BloquearEsquina(20,20)
+      Pos(20,20)
+      depositarFlor
+      Pos(av,ca)
+      LiberarEsquina(20,20)
+  fin
+  proceso izquierda 
+  comenzar
+    repetir 3 
+      derecha
+  fin
+areas
+  aEquipo1: AreaPC(1,1,11,10)
+  aEquipo2: AreaPC(13,1,23,10)
+  aJefe: AreaP (1,100,1,100)
+  punto: AreaPC (20,20,20,20)
+robots
+  robot robot1
+  variables
+    id: numero
+    equipo: numero
+    f: numero
+  comenzar
+    f:= 0
+    RecibirMensaje(equipo,rJefe)
+    izquierda
+    repetir 10
+      juntarF(f)
+      mover
+    izquierda
+    juntarF(f)
+    repetir 8
+      juntarF(f)
+      mover
+    juntarF(f)
+    si(equipo=1)
+      EnviarMensaje(f,r2E1)
+    sino
+      EnviarMensaje(f,r2E2)
+    depositar(f,PosAv,PosCa)
+  fin
+  robot robot2
+  variables
+    id: numero
+    equipo: numero
+    f: numero
+    total: numero
+  comenzar
+    RecibirMensaje(equipo,rJefe)
+    si(equipo=1)
+      RecibirMensaje(total,r1E1)
+    sino
+      RecibirMensaje(total,r1E2)
+    derecha
+    repetir 10
+      juntarF(f)
+      mover
+    juntarF(f)
+    izquierda
+    repetir 8
+      juntarF(f)
+      mover
+    juntarF(f)
+    total:= total+f
+    EnviarMensaje(equipo,rJefe)
+    EnviarMensaje(total,rJefe)
+    depositar(f,PosAv,PosCa)
+  fin
+  robot jefe
+  variables
+    equipo: numero
+    max: numero
+    aux: numero
+  comenzar
+    EnviarMensaje(1,r1E1)
+    EnviarMensaje(1,r2E1)
+    EnviarMensaje(2,r1E2)
+    EnviarMensaje(2,r2E2)
+    max:= -1
+    repetir 2
+      RecibirMensaje(equipo,*)
+      si(equipo=1)
+        RecibirMensaje(aux,r2E1)
+      sino
+        RecibirMensaje(aux,r2E2)
+      si(aux>max)
+        max:=aux
+    Informar(max)
+  fin 
+variables
+  rJefe: jefe
+  r1E1: robot1
+  r1E2: robot1
+  r2E1: robot2
+  r2E2: robot2
+comenzar
+  AsignarArea(rJefe,aJefe)
+  AsignarArea(r1E1,aEquipo1)
+  AsignarArea(r1E1,punto)
+  AsignarArea(r2E1,aEquipo1)
+  AsignarArea(r2E1,punto)
+  AsignarArea(r1E2,aEquipo2)
+  AsignarArea(r1E2,punto)
+  AsignarArea(r2E2,aEquipo2)
+  AsignarArea(r2E2,punto)
+  Iniciar(rJefe,1,100)
+  Iniciar(r1E1,11,10)
+  Iniciar(r2E1,1,1)
+  Iniciar(r1E2,23,10)
+  Iniciar(r2E2,13,1)
+fin

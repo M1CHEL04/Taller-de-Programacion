@@ -1,0 +1,76 @@
+programa ejercicio3
+procesos
+  proceso juntarP (ES p: numero; E n: numero)
+  comenzar 
+    mientras ((HayPapelEnLaEsquina)& (n<>p))
+      tomarPapel
+      p:= p+1
+  fin
+areas
+  a1: AreaP (1,1,1,100)
+  a2: AreaP (2,1,2,100)
+  a3: AreaP (3,1,3,100)
+  ac: AreaP (100,100,100,100)
+robots
+  robot recolector
+  variables
+    id: numero
+    p: numero
+    aux1: boolean
+    aux2: boolean
+    n: numero
+    msj: boolean
+  comenzar
+    aux1:= V
+    aux2:= V
+    RecibirMensaje(id,rC)
+    mientras((PosCa<100)&(aux1)&(aux2))
+      Random(n,1,5)
+      p:= 0
+      juntarP(p,n)
+      mientras ((n<>p)&(PosCa<100))
+        mover
+        juntarP(p,n)
+      si(PosCa =100)
+        msj:= F
+      sino
+        msj:=V
+      si(id=1)
+        EnviarMensaje(msj,r2)
+        EnviarMensaje(msj,r3)
+        RecibirMensaje(aux1,*)
+        RecibirMensaje(aux2,*)
+      sino
+        si(id=2)
+          EnviarMensaje(msj,r1)
+          EnviarMensaje(msj,r3)
+          RecibirMensaje(aux1,*)
+          RecibirMensaje(aux2,*)
+        sino
+          EnviarMensaje(msj,r1)
+          EnviarMensaje(msj,r2)
+          RecibirMensaje(aux1,*)
+          RecibirMensaje(aux2,*)
+    Informar('termine', aux1)
+  fin
+  robot coordinador
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+  fin
+variables
+  r1: recolector
+  r2: recolector
+  r3: recolector
+  rC: coordinador
+comenzar
+  AsignarArea(rC,ac)
+  AsignarArea(r1,a1)
+  AsignarArea(r2,a2)
+  AsignarArea(r3,a3)
+  Iniciar(rC,100,100)
+  Iniciar(r1,1,1)
+  Iniciar(r2,2,1)
+  Iniciar(r3,3,1)
+fin

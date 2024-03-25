@@ -1,0 +1,97 @@
+programa ej5
+procesos
+  proceso juntarP (ES acc: boolean)
+  comenzar
+    si(HayPapelEnLaEsquina)
+      tomarPapel
+    sino
+      acc:=F
+  fin
+areas
+  a1: AreaP (4,1,4,100)
+  a2: AreaP (6,1,6,100)
+  a3: AreaP (8,1,8,100)
+  a4: AreaP (10,1,10,100)
+  punto: AreaPC (11,11,11,11)
+  aJefe: AreaP (1,1,1,1)
+robots
+  robot jefe
+  variables
+    who: numero
+    pasos: numero
+    max: numero
+    rMax: numero
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    EnviarMensaje(4,r4)
+    max:=-1
+    repetir 4
+      RecibirMensaje(who,*)
+      si(who=1)
+        RecibirMensaje(pasos,r1)
+      sino
+        si(who=2)
+          RecibirMensaje(pasos,r2)
+        sino
+          si(who=3)
+            RecibirMensaje(pasos,r3)
+          sino
+            RecibirMensaje(pasos,r4)
+      si(pasos>max)
+        max:=pasos
+        rMax:=who
+    Informar(rMax)
+  fin
+  robot corredor
+  variables
+    id: numero
+    pasos: numero
+    acc: boolean
+    actAv:numero
+    actCa: numero
+  comenzar
+    pasos:=0
+    acc:=V
+    actAv:=PosAv
+    actCa:=PosCa
+    RecibirMensaje(id,rJefe)
+    mientras (acc)
+      BloquearEsquina(11,11)
+      Pos(11,11)
+      juntarP(acc)
+      si(acc)&(PosCa<99)
+        Pos(actAv,actCa)
+        LiberarEsquina(11,11)
+        mover
+        pasos:=pasos + 1
+        actCa:= actCa + 1
+      sino
+        Pos(actAv,actCa)
+        LiberarEsquina(11,11)
+    EnviarMensaje(id,rJefe)
+    EnviarMensaje(pasos,rJefe)
+  fin
+variables
+  r1: corredor
+  r2: corredor
+  r3: corredor
+  r4: corredor
+  rJefe: jefe
+comenzar
+  AsignarArea(r1,a1)
+  AsignarArea(r1,punto)
+  AsignarArea(r2,a2)
+  AsignarArea(r2,punto)
+  AsignarArea(r3,a3)
+  AsignarArea(r3,punto)
+  AsignarArea(r4,a4)
+  AsignarArea(r4,punto)
+  AsignarArea(rJefe,aJefe)
+  Iniciar(r1,4,1)
+  Iniciar(r2,6,1)
+  Iniciar(r3,8,1)
+  Iniciar(r4,10,1)
+  Iniciar(rJefe,1,1)
+fin

@@ -1,0 +1,88 @@
+programa ejercicio2
+procesos
+  proceso juntarF (ES f: numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      f:= f+1
+  fin
+  proceso juntarP (ES p: numero)
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      p:= p+1
+  fin
+  proceso izquierda
+  comenzar
+    repetir 3
+      derecha
+  fin
+  proceso escalon (E alto: numero; ES cant: numero)
+  variables
+    f:numero
+    p: numero
+  comenzar
+    repetir alto
+      juntarF(f)
+      juntarP(p)
+      mover
+    derecha
+    juntarF(f)
+    juntarP(p)
+    mover
+    izquierda
+    si(f>p)
+      cant:= cant+1
+  fin
+  proceso escalera (ES cant: numero)
+  variables
+    alto: numero
+  comenzar
+    Random(alto,1,5)
+    repetir 4
+      escalon(alto,cant)
+  fin
+areas
+  area0: AreaP (1,1,1,1)
+  area1: AreaP (2,1,2,1)
+  area2: AreaP (7,1,7,1)
+  area3: AreaP (12,1,12,1)
+  ciudad: AreaPC (1,2,100,100)
+robots
+  robot recolector
+  variables
+    cant: numero
+  comenzar
+    cant:= 0
+    escalera (cant)
+    EnviarMensaje(cant,rJefe)
+  fin
+  robot jefe
+  variables
+    suma: numero
+    cant: numero
+  comenzar
+    suma:=0
+    repetir 3
+      RecibirMensaje(cant,*)
+      suma:= suma + cant
+    Informar(suma)
+  fin
+variables
+  rJefe: jefe
+  r1: recolector
+  r2: recolector
+  r3: recolector
+comenzar
+  AsignarArea(rJefe,area0)
+  AsignarArea(r1,area1)
+  AsignarArea(r2,area2)
+  AsignarArea(r3,area3)
+  AsignarArea(r1,ciudad)
+  AsignarArea(r2,ciudad)
+  AsignarArea(r3,ciudad)
+  Iniciar (rJefe,1,1)
+  Iniciar (r1,2,1)
+  Iniciar (r2,7,1)
+  Iniciar (r3,12,1)
+fin

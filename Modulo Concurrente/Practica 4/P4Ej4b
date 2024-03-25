@@ -1,0 +1,99 @@
+programa ejercicio4
+procesos
+  proceso juntarP 
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+  fin
+  proceso juntarF
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+  fin
+  proceso vaciar
+  comenzar
+    mientras(HayFlorEnLaBolsa)
+      depositarFlor
+    mientras (HayPapelEnLaBolsa)
+      depositarPapel
+  fin
+  proceso solicitud 
+  variables
+    av: numero
+    ca: numero
+    r: numero
+    tarea: numero
+  comenzar  
+    Random(r,1,2)
+    Random (tarea,1,3)
+    Random (av,2,100)
+    Random (ca,2,100)
+    si(r=1)
+      EnviarMensaje(tarea,t1)
+      EnviarMensaje(av,t1)
+      EnviarMensaje(ca,t1)
+    sino
+      EnviarMensaje(tarea,t2)
+      EnviarMensaje(av,t2)
+      EnviarMensaje(ca,t2)
+  fin
+areas
+  aJ: AreaP (1,1,1,1)
+  a1: AreaP (2,1,2,1)
+  a2: AreaP (3,1,3,1)
+  aT: AreaPC (2,2,100,100)
+robots
+  robot jefe
+  variables
+    aux: numero
+  comenzar
+    EnviarMensaje(1,t1)
+    EnviarMensaje(2,t2)
+    repetir 10
+      solicitud
+      RecibirMensaje(aux,*)
+    EnviarMensaje(4,t1)
+    EnviarMensaje(4,t2)
+  fin
+  robot trabajador
+  variables
+    id: numero
+    tarea: numero
+    av: numero
+    ca: numero
+    ActAv: numero
+    ActCa: numero
+  comenzar
+    ActAv:= PosAv
+    ActCa:= PosCa
+    RecibirMensaje(id,rJefe)
+    RecibirMensaje(tarea,rJefe)
+    mientras(tarea<>4)
+      RecibirMensaje(av,rJefe)
+      RecibirMensaje(ca,rJefe)
+      Pos(av,ca)
+      si(tarea=1)
+        juntarF
+      sino
+        si(tarea=2)
+          juntarP
+        sino
+          vaciar
+      Pos(ActAv,ActCa)
+      EnviarMensaje(1,rJefe)
+      RecibirMensaje(tarea,rJefe)
+  fin
+variables
+  t1: trabajador
+  t2: trabajador
+  rJefe: jefe
+comenzar
+  AsignarArea(rJefe,aJ)
+  AsignarArea(t1,a1)
+  AsignarArea(t2,a2)
+  AsignarArea(t1,aT)
+  AsignarArea(t2,aT)
+  Iniciar (rJefe,1,1)
+  Iniciar(t1,2,1)
+  Iniciar(t2,3,1)
+fin

@@ -1,0 +1,112 @@
+programa ejercicio1
+procesos
+  proceso juntarP(ES p: numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      p:= p+1
+  fin
+  proceso juntaF(ES f: numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      f:= f+1
+  fin
+areas
+  af: AreaP (1,100,1,100)
+  aR: AreaPC (2,1,3,100)
+  aA: AreaPC (1,98,100,99)
+robots
+  robot fiscalizador
+  variables
+    id: numero
+    tR: numero
+    tA: numero
+    eMax: numero
+    aux: numero
+  comenzar
+    EnviarMensaje(1,a1)
+    EnviarMensaje(1,a2)
+    EnviarMensaje(2,r1)
+    EmviarMensaje(2,r2)
+    EnviarMensaje(1,a1) 
+    EnviarMensaje(2,a2)
+    EnviarMensaje(3,r1) 
+    EnviarMensaje(4,r2)
+    tA:= 0
+    tR:= 0
+    repetir 4
+      RecibirMensaje(id,*)
+      si(id=1)
+        RecibirMensaje(aux,a1)
+        tA:= tA+aux
+      sino
+        si(id=2)
+          RecibirMensaje(aux,a2)
+          tA:= tA+aux
+        sino
+          si(id=3)
+            RecibirMensaje(aux,r1)
+            tR:= tR+aux
+          sino
+            RecibirMensaje(aux,r2)
+            tR:= tR+aux
+    si(tR>tA)
+      eMax:= 2
+    sino
+      eMax:= 1
+    Informar(eMax)
+  fin
+  robot rojo
+  variables
+    equipo: numero
+    f: numero
+  comenzar
+    f:= 0
+    RecibirMensaje(equipo,rFiscal)
+    RecibirMensaje(id,rFiscal)
+    repetir 96
+      juntarF(f)
+      mover
+    BloquearEsquina(PosAv,98)
+    mover
+    juntarF(f)
+    BloquearEsquina(PosAv,99)
+    mover
+    LiberarEsquina(PosAv,98)
+    juntarF(f)
+    mover
+    LiberarEsquina(PosAv,99)
+    EnviarMensaje(id,rFiscal)
+    EnviarMensaje(f,rFiscal)
+  fin
+  robot azul
+  variables
+    equipo: numero
+    p: numero
+  comenzar
+    derecha
+    p:= 0
+    RecibirMensaje(equipo,rFiscal)
+    RecibirMensaje(id,rFiscal)
+    juntarP(p)
+    BloquearEsquina(2,PosCa)
+    mover
+    juntarP(p)
+    BloquearEsquina(3,PosCa)
+    mover
+    LiberarEsquina(2,PosCa)
+    juntarP(p)
+    mover
+    LiberarEsquina(3,PosCa)
+    repetir 96
+      juntarP(p)
+      mover
+    EnviarMensaje(id,rFiscal)
+    EnviarMensaje(p,rFiscal)
+  fin
+variables
+  
+comenzar
+
+fin

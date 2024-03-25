@@ -1,0 +1,69 @@
+programa Ej2
+procesos 
+  proceso recorrer (ES cantPapeles: numero)
+  comenzar
+    cantPapeles:= 0
+    repetir 19
+      mientras (HayPapelEnLaEsquina)
+        tomarPapel
+        cantPapeles:= cantPapeles + 1
+      mover
+  fin
+  proceso izquierda 
+  comenzar
+    repetir 3
+      derecha
+  fin
+areas
+  a1: AreaP (10,10,10,29)
+  a2: AreaP (10,30,29,30)
+  a3: AreaP (30,11,30,30)
+  a4: AreaP (11,10,30,10)
+robots
+  robot robot1
+  variables
+    cantPapeles: numero
+  comenzar
+    recorrer (cantPapeles)
+    Informar (cantPapeles)
+  fin
+  robot robot2
+  variables 
+    cantPapeles: numero
+  comenzar
+    derecha
+    recorrer (cantPapeles)
+    Informar (cantPapeles)
+  fin
+  robot robot3
+  variables
+    cantPapeles: numero
+  comenzar
+    repetir 2
+      derecha
+    recorrer (cantPapeles)
+    Informar (cantPapeles)
+  fin
+  robot robot4
+  variables
+    cantPapeles: numero
+  comenzar
+    izquierda
+    recorrer (cantPapeles)
+    Informar (cantPapeles)
+  fin
+variables
+  r1: robot1
+  r2: robot2
+  r3: robot3
+  r4: robot4
+comenzar
+  AsignarArea (r1,a1)
+  AsignarArea (r2,a2)
+  AsignarArea (r3,a3)
+  AsignarArea (r4,a4)
+  Iniciar (r1,10,10)
+  Iniciar (r2,10,30)
+  Iniciar (r3,30,30)
+  Iniciar (r4,30,10)
+fin    

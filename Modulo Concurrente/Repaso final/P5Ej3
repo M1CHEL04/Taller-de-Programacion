@@ -1,0 +1,90 @@
+programa ej3
+procesos
+  proceso juntarF (ES f: numero)
+  comenzar
+    si(HayFlorEnLaEsquina)
+      tomarFlor
+      f:=f+1
+  fin
+  proceso vaciar
+  comenzar
+    mientras(HayFlorEnLaBolsa)
+      depositarFlor
+  fin
+  proceso cosechar (ES f: numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      f:=f+1
+  fin
+areas
+  a1: AreaP (1,3,100,3)
+  a2: AreaP (1,4,100,4)
+  aC: AreaP (1,5,1,5)
+  punto: AreaC (10,10,10,10)
+robots
+  robot recolector
+  variables
+    f: numero
+    actAv:numero
+    actCa:numero
+    pasos:numero
+  comenzar
+    derecha
+    actCa:=PosCa
+    f:=0
+    pasos:=0
+    mientras(PosAv<100)
+      juntarF(f)
+      mientras(PosAv<100)&(f<10)&(pasos<5)
+        mover
+        pasos:= pasos+1
+        juntarF(f)
+      si(f=10)
+        f:=0
+      si(pasos=5)
+        pasos:=0
+      actAv:=PosAv
+      BloquearEsquina(10,10)
+      Pos(10,10)
+      vaciar
+      Pos(actAv,actCa)
+      LiberarEsquina(10,10)
+      EnviarMensaje(1,rC)
+    EnviarMensaje(2,rC)
+  fin
+  robot cosechadora
+  variables
+    cant:numero
+    f: numero
+    acc:numero
+  comenzar
+    f:=0
+    cant:=0
+    mientras (cant<>2)
+      RecibirMensaje(acc,*)
+      si(acc=1)
+        BloquearEsquina(10,10)
+        Pos(10,10)
+        cosechar(f)
+        Pos(1,5)
+        LiberarEsquina(10,10)
+      sino
+        cant:=cant+1
+    Informar(f)
+  fin
+variables
+  r1: recolector
+  r2: recolector
+  rC: cosechadora
+comenzar
+  AsignarArea(r1,a1)
+  AsignarArea(r1,punto)
+  AsignarArea(r2,a2)
+  AsignarArea(r2,punto)
+  AsignarArea(rC,aC)
+  AsignarArea(rC,punto)
+  Iniciar(r1,1,3)
+  Iniciar(r2,1,4)
+  Iniciar(rC,1,5)
+fin

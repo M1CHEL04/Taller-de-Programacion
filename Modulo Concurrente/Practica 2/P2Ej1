@@ -1,0 +1,63 @@
+programa ejercici1
+procesos
+  proceso juntarF (ES f: numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      f:= f+1 
+  fin
+  proceso recorrer (ES f: numero)
+  comenzar
+    repetir 9
+      juntarF(f)
+      mover
+    juntarF(f)
+  fin
+areas
+  area1: AreaC(1,1,100,100)
+robots
+  robot recolector
+  variables
+    f: numero
+    dif: numero
+    quienSoy: numero
+  comenzar
+    f:= 0
+    RecibirMensaje(quienSoy,rJefe)
+    recorrer(f)
+    EnviarMensaje(quienSoy,rJefe)
+    EnviarMensaje(f,rJefe)
+  fin
+  robot jefe
+  variables
+    f1: numero
+    f2: numero
+    who: numero
+    dif: numero
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    repetir 2
+      RecibirMensaje(who,*)
+      si(who=1)
+        RecibirMensaje(f1,r1)
+      sino
+        RecibirMensaje(f2,r2)
+    si(f1<f2)
+      dif:= f2-f1
+    sino
+      dif:= f1-f2
+    Informar(dif)
+  fin
+variables
+  rJefe: jefe
+  r1: recolector
+  r2: recolector
+comenzar
+  AsignarArea(rJefe,area1)
+  AsignarArea(r1,area1)
+  AsignarArea(r2,area1)
+  Iniciar(rJefe,2,1)
+  Iniciar(r1,1,1)
+  Iniciar(r2,2,11)
+fin
